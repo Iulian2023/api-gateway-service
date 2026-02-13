@@ -8,10 +8,13 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ClientsModule.register([
       {
         name: 'ANIMAL_REGISTRY_SERVICE',
-        transport: Transport.TCP,
+        transport: Transport.RMQ,
         options: {
-          host: 'animal-registry-service',
-          port: 3001,
+          urls: [process.env.RABBITMQ_URL || 'amqp://user:password@localhost:5672'],
+          queue: 'animal_registry_queue',
+          queueOptions: {
+            durable: true,
+          },
         },
       },
     ]),

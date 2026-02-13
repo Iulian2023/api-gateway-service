@@ -8,10 +8,13 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ClientsModule.register([
       {
         name: 'HABITAT_MANAGER_SERVICE',
-        transport: Transport.TCP,
+        transport: Transport.RMQ,
         options: {
-          host: 'habitat-manager-service',
-          port: 3002,
+          urls: [process.env.RABBITMQ_URL || 'amqp://user:password@localhost:5672'],
+          queue: 'habitat_manager_queue',
+          queueOptions: {
+            durable: true,
+          },
         },
       },
     ]),
